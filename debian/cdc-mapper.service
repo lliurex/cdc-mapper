@@ -1,0 +1,19 @@
+[Unit]
+Description=N4D Daemon
+Wants=network-online.target
+After=network-online.target
+
+
+[Service]
+User=root
+ExecStart=/usr/sbin/n4d-server
+StandardOutput=journal
+Restart=always
+RestartSec=5
+StartLimitBurst=10
+StartLimitInterval=200
+
+
+[Install]
+WantedBy=multi-user.target
+
