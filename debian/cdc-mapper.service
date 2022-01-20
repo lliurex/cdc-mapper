@@ -1,12 +1,12 @@
 [Unit]
-Description=N4D Daemon
+Description=CDC mapper
 Wants=network-online.target
 After=network-online.target
 
 
 [Service]
 User=root
-ExecStart=/usr/sbin/n4d-server
+ExecStart=/usr/sbin/cdc-mapper
 StandardOutput=journal
 Restart=always
 RestartSec=5
