@@ -48,6 +48,7 @@ case "$1" in
 	if [ -z "$2" ]; then
 		insert_nss_entry
 	fi
+	pam-auth-update --force --package n4d-cdc	
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

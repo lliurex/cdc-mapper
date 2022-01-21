@@ -49,6 +49,7 @@ case "$1" in
 	if [ "${DPKG_MAINTSCRIPT_PACKAGE_REFCOUNT:-1}" = 1 ]; then
             remove_nss_entry
         fi
+	pam-auth-update --force --package n4d-cdc
     ;;
     upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
     ;;
