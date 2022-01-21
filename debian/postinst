@@ -17,7 +17,13 @@ set -e
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-# Code copy from sssd package 
+# Code copy from sssd package
+
+log() {
+    echo "$*"
+}
+
+
 insert_nss_entry() {
     log "Checking NSS setup..."
     # abort if /etc/nsswitch.conf does not exist

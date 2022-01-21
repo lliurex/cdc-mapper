@@ -22,6 +22,11 @@ set -e
 
 
 # Code copy from sssd package
+
+log() {
+    echo "$*"
+}
+
 remove_nss_entry() {
     log "Checking NSS setup..."
     # abort if /etc/nsswitch.conf does not exist
