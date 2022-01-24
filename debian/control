@@ -12,3 +12,18 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: LliureX mapper for CDC users
  Create service to map on login user step CDC users to lliurex groups
  (teachers, students, ...)
+
+Package: cdc-mapper-config-localhost
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: LliureX mapper config for standalone or server installations
+ libnss lliurex config for desktops, servers or other standalone lliurex installations
+
+Package: cdc-mapper-config-client
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: cdc-mapper-config-localhost
+Provides: cdc-mapper-config-localhost
+Replaces: cdc-mapper-config-localhost
+Description: LliureX mapper config for classroom clients
+ libnss lliurex config for clients. This config is set to http://server
