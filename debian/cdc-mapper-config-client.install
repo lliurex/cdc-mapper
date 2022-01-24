@@ -1,1 +1,1 @@
-configs/client.conf /etc/libnss-lliurex.conf
+configs/client/libnss-lliurex.conf /etc
