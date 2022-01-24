@@ -2,7 +2,10 @@
 
 import os
 import requests
-
-url_base = "http://localhost:9797/"
+import json
+from pathlib import Path
+config_path = Path("/etc/libnss_lliurex.conf")
+config = json.load(str(config_path))
+url_base = config["server"]
 requests.request( url=url_base+"push/"+os.environ["PAM_USER"], method="get" )
 requests.request( url=url_base+"wait_for_queries", method="get" )
