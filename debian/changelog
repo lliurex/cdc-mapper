@@ -1,3 +1,9 @@
+cdc-mapper (0.5.3) focal; urgency=medium
+
+  * Open file to parse
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 12:17:51 +0100
+
 cdc-mapper (0.5.2) focal; urgency=medium
 
   * Wrong path
