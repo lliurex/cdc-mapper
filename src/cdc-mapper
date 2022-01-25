@@ -31,8 +31,8 @@ class CDC:
         self.sssd_config = ConfigParser()
         if self.config_path.exists():
             self.sssd_config.read( str( self.config_path ) )
-            list_gva_domains = filter(lambda x : "EDU.GVA.ES" in x, self.sssd_config.sections())
-            self.ldap_config = list_gva_domains[0]
+            list_gva_domains = list(filter(lambda x : "EDU.GVA.ES" in x, self.sssd_config.sections()))
+            self.ldap_config = self.sssd_config[list_gva_domains[0]]
             self.base_dn = self.ldap_config["ldap_search_base"]
 
     #def load_configuration
