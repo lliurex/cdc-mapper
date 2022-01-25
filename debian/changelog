@@ -1,3 +1,10 @@
+cdc-mapper (0.6) focal; urgency=medium
+
+  * Add mutex
+  * Add 5 minutes cache 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 14:04:09 +0100
+
 cdc-mapper (0.5.3) focal; urgency=medium
 
   * Open file to parse
