@@ -1,3 +1,9 @@
+cdc-mapper (0.5.1) focal; urgency=medium
+
+  * Fix code 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 11:10:37 +0100
+
 cdc-mapper (0.5) focal; urgency=medium
 
   * Add configs for client and standalone 
