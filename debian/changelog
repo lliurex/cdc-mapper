@@ -1,3 +1,9 @@
+cdc-mapper (0.5.2) focal; urgency=medium
+
+  * Wrong path
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 12:00:57 +0100
+
 cdc-mapper (0.5.1) focal; urgency=medium
 
   * Fix code 
