@@ -8,7 +8,7 @@ Homepage: https://www.lliurex.net
 
 Package: cdc-mapper
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, python3-flask, gunicorn, python3-ldap
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-flask, python3-waitress, python3-ldap
 Description: LliureX mapper for CDC users
  Create service to map on login user step CDC users to lliurex groups
  (teachers, students, ...)

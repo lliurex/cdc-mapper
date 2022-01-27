@@ -7,7 +7,7 @@ After=network-online.target
 [Service]
 User=root
 WorkingDirectory=/usr/share/cdcmapper
-ExecStart=gunicorn -w 4 -bind 0.0.0.0 wsgi:app
+ExecStart=waitress-serve --listen "0.0.0.0:9797" wsgi:app
 StandardOutput=journal
 Restart=always
 RestartSec=5
