@@ -6,7 +6,8 @@ After=network-online.target
 
 [Service]
 User=root
-ExecStart=/usr/sbin/cdc-mapper
+WorkingDirectory=/usr/share/cdcmapper
+ExecStart=gunicorn -w 4 -bind 0.0.0.0 wsgi:app
 StandardOutput=journal
 Restart=always
 RestartSec=5
