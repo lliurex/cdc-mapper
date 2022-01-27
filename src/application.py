@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from flask import Flask, Response, request, abort, jsonify
 import ldap
 from pathlib import Path
@@ -161,4 +160,3 @@ def clear_cache():
     return jsonify(cdc.clear_cache())
 
 
-app.run(host="0.0.0.0",port="9797")
