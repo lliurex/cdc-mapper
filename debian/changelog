@@ -1,3 +1,9 @@
+cdc-mapper (0.8) focal; urgency=medium
+
+  * Replace gunicor by waitress. This is multithreading
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 27 Jan 2022 16:02:04 +0100
+
 cdc-mapper (0.7) focal; urgency=medium
 
   * Add gunicorn as server
