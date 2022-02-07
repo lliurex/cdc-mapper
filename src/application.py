@@ -4,6 +4,7 @@ from pathlib import Path
 from configparser import ConfigParser
 from threading import Thread, Semaphore
 import time
+import grp
 app = Flask(__name__)
 
 class CDC:
@@ -11,7 +12,12 @@ class CDC:
     def __init__(self):
         self.load_configuration()
         self.list_of_queries = {}
-        self.cache_users = {"students":[10004, []], "teachers":[10003,[]] }
+        try:
+            sudo_gid = grp.getgrnam("sudo").gr_gid
+            adm_gid = grp.getgrnam("adm").gr_gid
+            self.cache_users = {"students":[10004, []], "teachers":[10003,[]], "sudo":[sudo_gid,[]], "adm": [adm_gid,[]] }
+        except:
+            self.cache_users = {"students":[10004, []], "teachers":[10003,[]] }
         self.users_timeout = {}
         self.semaphore = Semaphore()
     #def __init__
@@ -77,6 +83,13 @@ class CDC:
             if x.lower().startswith("doc"):
                 self.cache_users["teachers"][1].append(user)
                 self.cache_users["teachers"][1] = list(set(self.cache_users["teachers"][1]))
+            if "sudo" in self.cache_users.keys():
+                if x.lower().startswith("adm"):
+                    self.cache_users["sudo"][1].append(user)
+                    self.cache_users["sudo"][1] = list(set(self.cache_users["sudo"][1]))
+                    self.cache_users["adm"][1].append(user)
+                    self.cache_users["adm"][1] = list(set(self.cache_users["adm"][1]))
+
         self.semaphore.release()
         # Remove query from list becauseof this finish
         del(self.list_of_queries[identifier])
