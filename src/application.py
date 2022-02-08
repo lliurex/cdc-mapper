@@ -1,20 +1,60 @@
 from flask import Flask, Response, request, abort, jsonify
 import ldap
+import json
 from pathlib import Path
 from configparser import ConfigParser
 from threading import Thread, Semaphore
 import time
+import grp
+from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
 class CDC:
 
     def __init__(self):
-        self.load_configuration()
+        # initialize variables
+        self.cache_file = Path('/var/cdc_mapper/cache')
         self.list_of_queries = {}
-        self.cache_users = {"students":[10004, []], "teachers":[10003,[]] }
         self.users_timeout = {}
+        self.cache_users = {}
         self.semaphore = Semaphore()
+
+        self.cache_file.parent.mkdir(parents=True, exist_ok=True)
+        self.load_configuration()
+
+        self.init_group("students",10004)
+        self.init_group("teachers",10003)
+        self.init_group("sudo")
+        self.init_group("adm")
+        self.load_cache()
+        
     #def __init__
+
+    def init_group(self, name, default_id=None):
+        try:
+            candidate_gid = grp.getgrnam(name).gr_gid
+        except:
+            if default_id is not None:
+                candidate_gid = default_id
+            else:
+                return 
+        self.cache_users[name] = [candidate_gid,[]]
+    #def init_group
+
+    def load_cache(self):
+        if not self.cache_file.exists():
+            return 
+        with self.cache_file.open("r") as fd:
+            cache_data = json.load(fd)
+
+        for x in cache_data["groups"].keys():
+            if x in self.cache_users.keys():
+                self.cache_users[x][1] = cache_data["groups"][x][1]
+            else:
+                self.cache_users[x] = cache_data["groups"][x]
+        self.users_timeout = cache_data["timeouts"]
+    #def load_cache
+
 
     @property
     def identifier(self):
@@ -40,6 +80,8 @@ class CDC:
     def load_connection(self):
        self.ldap = ldap.initialize( self.ldap_config[ "ldap_uri" ] )
        self.ldap.set_option( ldap.VERSION, ldap.VERSION3 )
+       self.ldap.set_option( ldap.OPT_NETWORK_TIMEOUT, 20 )
+       self.ldap.set_option( ldap.OPT_TIMEOUT, 20)
        self.ldap.bind_s( self.ldap_config[ "ldap_default_bind_dn" ], self.ldap_config[ "ldap_default_authtok" ] )
 
     def push_query( self, user ):
@@ -56,15 +98,30 @@ class CDC:
     #def push_query
 
 
-    def _push_query(self, user, identifier):
-        self.load_connection()
-
+    def user_in_cache(self, user):
         # 5 minutes cache
-        if user in self.users_timeout.keys() and ( self.users_timeout[user] - 300 ) <= time.time():
+        return user in self.users_timeout.keys() and ( self.users_timeout[user]["time"] - 300 ) <= time.time()
+
+    def clean_user_from_groups(self, user):
+        self.semaphore.acquire()
+        for x in self.cache_users.keys():
+            if user in self.cache_users[x][1]:
+                self.cache_users[x][1].remove(user)
+        self.semaphore.release()
+
+    def _push_query(self, user, identifier):
+        try:
+            self.load_connection()
+        except ldap.SERVER_DOWN:
             del(self.list_of_queries[identifier])
             return
 
-        self.users_timeout[user] = time.time()
+        if self.user_in_cache(user):
+            del(self.list_of_queries[identifier])
+            return
+
+        self.users_timeout[user] = {"time":time.time(), "state":"login"}
+        self.clean_user_from_groups(user)
         list_groups = []
         dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
         for dn_user in dn_user_list:
@@ -77,6 +134,13 @@ class CDC:
             if x.lower().startswith("doc"):
                 self.cache_users["teachers"][1].append(user)
                 self.cache_users["teachers"][1] = list(set(self.cache_users["teachers"][1]))
+            if "sudo" in self.cache_users.keys():
+                if x.lower().startswith("adm"):
+                    self.cache_users["sudo"][1].append(user)
+                    self.cache_users["sudo"][1] = list(set(self.cache_users["sudo"][1]))
+                    self.cache_users["adm"][1].append(user)
+                    self.cache_users["adm"][1] = list(set(self.cache_users["adm"][1]))
+
         self.semaphore.release()
         # Remove query from list becauseof this finish
         del(self.list_of_queries[identifier])
@@ -140,7 +204,16 @@ class CDC:
         return True
     #def clear_cache
 
+    def save_cache(self):
+        self.semaphore.acquire()
+        with self.cache_file.open("a") as fd:
+            json.dump({"groups":self.cache_users, "timeouts":self.users_timeout},fd)
+        self.semaphore.release()
+    
 cdc = CDC()
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=cdc.save_cache, trigger="interval", minutes=10)
+scheduler.start()
 
 @app.route('/')
 @app.route('/getgrall')
