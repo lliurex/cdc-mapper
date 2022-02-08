@@ -10,17 +10,30 @@ app = Flask(__name__)
 class CDC:
 
     def __init__(self):
-        self.load_configuration()
         self.list_of_queries = {}
-        try:
-            sudo_gid = grp.getgrnam("sudo").gr_gid
-            adm_gid = grp.getgrnam("adm").gr_gid
-            self.cache_users = {"students":[10004, []], "teachers":[10003,[]], "sudo":[sudo_gid,[]], "adm": [adm_gid,[]] }
-        except:
-            self.cache_users = {"students":[10004, []], "teachers":[10003,[]] }
         self.users_timeout = {}
+        self.cache_users = {}
         self.semaphore = Semaphore()
+        self.load_configuration()
+
+        self.init_group("students",10004)
+        self.init_group("teachers",10003)
+        self.init_group("sudo")
+        self.init_group("adm")
     #def __init__
+
+    def init_group(self, name, default_id=None):
+        try:
+            candidate_gid = grp.getgrnam(name).gr_gid
+        except:
+            if default_id is not None:
+                candidate_gid = default_id
+            else:
+                return 
+        self.cache_users[name] = [candidate_gid,[]]
+    #def init_group
+
+
 
     @property
     def identifier(self):
@@ -64,6 +77,11 @@ class CDC:
     #def push_query
 
 
+    def user_in_cache(self, user):
+        # 5 minutes cache
+        return user in self.users_timeout.keys() and ( self.users_timeout[user]["time"] - 300 ) <= time.time()
+
+
     def _push_query(self, user, identifier):
         try:
             self.load_connection()
@@ -71,12 +89,11 @@ class CDC:
             del(self.list_of_queries[identifier])
             return
 
-        # 5 minutes cache
-        if user in self.users_timeout.keys() and ( self.users_timeout[user] - 300 ) <= time.time():
+        if self.user_in_cache(user):
             del(self.list_of_queries[identifier])
             return
 
-        self.users_timeout[user] = time.time()
+        self.users_timeout[user] = {"time":time.time(), "state":"login"}
         list_groups = []
         dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
         for dn_user in dn_user_list:
