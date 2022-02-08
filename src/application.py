@@ -6,6 +6,7 @@ from configparser import ConfigParser
 from threading import Thread, Semaphore
 import time
 import grp
+from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
 class CDC:
@@ -203,7 +204,16 @@ class CDC:
         return True
     #def clear_cache
 
+    def save_cache(self):
+        self.semaphore.acquire()
+        with self.cache_file.open("a") as fd:
+            json.dump({"groups":self.cache_users, "timeouts":self.users_timeout},fd)
+        self.semaphore.release()
+    
 cdc = CDC()
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=cdc.save_cache, trigger="interval", minutes=10)
+scheduler.start()
 
 @app.route('/')
 @app.route('/getgrall')
