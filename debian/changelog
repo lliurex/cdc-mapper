@@ -1,3 +1,10 @@
+cdc-mapper (0.9) focal; urgency=medium
+
+  * Add cache
+  * Add timeout to avoid 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 08 Feb 2022 16:01:09 +0100
+
 cdc-mapper (0.8) focal; urgency=medium
 
   * Replace gunicor by waitress. This is multithreading
