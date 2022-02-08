@@ -101,6 +101,12 @@ class CDC:
         # 5 minutes cache
         return user in self.users_timeout.keys() and ( self.users_timeout[user]["time"] - 300 ) <= time.time()
 
+    def clean_user_from_groups(self, user):
+        self.semaphore.acquire()
+        for x in self.cache_users.keys():
+            if user in self.cache_users[x][1]:
+                self.cache_users[x][1].remove(user)
+        self.semaphore.release()
 
     def _push_query(self, user, identifier):
         try:
@@ -114,6 +120,7 @@ class CDC:
             return
 
         self.users_timeout[user] = {"time":time.time(), "state":"login"}
+        self.clean_user_from_groups(user)
         list_groups = []
         dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
         for dn_user in dn_user_list:
