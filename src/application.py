@@ -1,5 +1,6 @@
 from flask import Flask, Response, request, abort, jsonify
 import ldap
+import json
 from pathlib import Path
 from configparser import ConfigParser
 from threading import Thread, Semaphore
@@ -10,16 +11,22 @@ app = Flask(__name__)
 class CDC:
 
     def __init__(self):
+        # initialize variables
+        self.cache_file = Path('/var/cdc_mapper/cache')
         self.list_of_queries = {}
         self.users_timeout = {}
         self.cache_users = {}
         self.semaphore = Semaphore()
+
+        self.cache_file.parent.mkdir(parents=True, exist_ok=True)
         self.load_configuration()
 
         self.init_group("students",10004)
         self.init_group("teachers",10003)
         self.init_group("sudo")
         self.init_group("adm")
+        self.load_cache()
+        
     #def __init__
 
     def init_group(self, name, default_id=None):
@@ -33,6 +40,19 @@ class CDC:
         self.cache_users[name] = [candidate_gid,[]]
     #def init_group
 
+    def load_cache(self):
+        if not self.cache_file.exists():
+            return 
+        with self.cache_file.open("r") as fd:
+            cache_data = json.load(fd)
+
+        for x in cache_data["groups"].keys():
+            if x in self.cache_users.keys():
+                self.cache_users[x][1] = cache_data["groups"][x][1]
+            else:
+                self.cache_users[x] = cache_data["groups"][x]
+        self.users_timeout = cache_data["timeouts"]
+    #def load_cache
 
 
     @property
