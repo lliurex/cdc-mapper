@@ -46,6 +46,8 @@ class CDC:
     def load_connection(self):
        self.ldap = ldap.initialize( self.ldap_config[ "ldap_uri" ] )
        self.ldap.set_option( ldap.VERSION, ldap.VERSION3 )
+       self.ldap.set_option( ldap.OPT_NETWORK_TIMEOUT, 20 )
+       self.ldap.set_option( ldap.OPT_TIMEOUT, 20)
        self.ldap.bind_s( self.ldap_config[ "ldap_default_bind_dn" ], self.ldap_config[ "ldap_default_authtok" ] )
 
     def push_query( self, user ):
@@ -63,7 +65,11 @@ class CDC:
 
 
     def _push_query(self, user, identifier):
-        self.load_connection()
+        try:
+            self.load_connection()
+        except ldap.SERVER_DOWN:
+            del(self.list_of_queries[identifier])
+            return
 
         # 5 minutes cache
         if user in self.users_timeout.keys() and ( self.users_timeout[user] - 300 ) <= time.time():
