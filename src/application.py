@@ -13,7 +13,7 @@ class CDC:
 
     def __init__(self):
         # initialize variables
-        self.cache_file = Path('/var/cdc_mapper/cache')
+        self.cache_file = Path('/var/cache/cdc_mapper/cache')
         self.list_of_queries = {}
         self.users_timeout = {}
         self.cache_users = {}
