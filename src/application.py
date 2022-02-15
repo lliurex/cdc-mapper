@@ -100,7 +100,7 @@ class CDC:
 
     def user_in_cache(self, user):
         # 5 minutes cache
-        return user in self.users_timeout.keys() and ( self.users_timeout[user]["time"] - 300 ) <= time.time()
+        return user in self.users_timeout.keys() and ( self.users_timeout[user]["time"]  >= ( time.time() - 300 ))
 
     def clean_user_from_groups(self, user):
         self.semaphore.acquire()
