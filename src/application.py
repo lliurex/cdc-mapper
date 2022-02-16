@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from configparser import ConfigParser
 from threading import Thread, Semaphore
+from copy import deepcopy
 import time
 import grp
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -17,7 +18,10 @@ class CDC:
         self.list_of_queries = {}
         self.users_timeout = {}
         self.cache_users = {}
-        self.semaphore = Semaphore()
+        self.read_lock = Semaphore()
+        self.read_lock_counter = 0
+        self.write_lock = Semaphore()
+        self.write_file_lock = Semaphore()
 
         self.cache_file.parent.mkdir(parents=True, exist_ok=True)
         self.load_configuration()
@@ -30,6 +34,21 @@ class CDC:
         
     #def __init__
 
+    def acquire_read_lock(self):
+        self.read_lock.acquire()
+        self.read_lock_counter += 1
+        if self.read_lock_counter == 1:
+            self.write_lock.acquire()
+        self.read_lock.release()
+
+    def release_read_lock(self):
+        self.read_lock.acquire()
+        self.read_lock_counter -= 1
+        if self.read_lock_counter == 0:
+            self.write_lock.release()
+        self.read_lock.release()
+
+    
     def init_group(self, name, default_id=None):
         try:
             candidate_gid = grp.getgrnam(name).gr_gid
@@ -38,7 +57,9 @@ class CDC:
                 candidate_gid = default_id
             else:
                 return 
+        self.write_lock.acquire()
         self.cache_users[name] = [candidate_gid,[]]
+        self.write_lock.release()
     #def init_group
 
     def load_cache(self):
@@ -46,13 +67,14 @@ class CDC:
             return 
         with self.cache_file.open("r") as fd:
             cache_data = json.load(fd)
-
+        self.write_lock.acquire()
         for x in cache_data["groups"].keys():
             if x in self.cache_users.keys():
                 self.cache_users[x][1] = cache_data["groups"][x][1]
             else:
                 self.cache_users[x] = cache_data["groups"][x]
         self.users_timeout = cache_data["timeouts"]
+        self.write_lock.release()
     #def load_cache
 
 
@@ -100,33 +122,41 @@ class CDC:
 
     def user_in_cache(self, user):
         # 5 minutes cache
-        return user in self.users_timeout.keys() and ( self.users_timeout[user]["time"] - 300 ) <= time.time()
+        user_in_list = user in self.users_timeout.keys()
+        self.acquire_read_lock()
+        last_login_in_time = self.users_timeout[user]["time"]  >= ( time.time() - 300 )
+        self.release_read_lock()
+        return user_in_list and last_login_in_time
 
     def clean_user_from_groups(self, user):
-        self.semaphore.acquire()
+        self.write_lock.acquire()
         for x in self.cache_users.keys():
             if user in self.cache_users[x][1]:
                 self.cache_users[x][1].remove(user)
-        self.semaphore.release()
+        self.write_lock.release()
 
     def _push_query(self, user, identifier):
+        if self.user_in_cache(user):
+            del(self.list_of_queries[identifier])
+            return
+
+        self.write_lock.acquire()
+        self.users_timeout[user] = {"time":time.time(), "state":"login"}
+        self.write_lock.release()
+
+        self.save_cache()
         try:
             self.load_connection()
         except ldap.SERVER_DOWN:
             del(self.list_of_queries[identifier])
             return
 
-        if self.user_in_cache(user):
-            del(self.list_of_queries[identifier])
-            return
-
-        self.users_timeout[user] = {"time":time.time(), "state":"login"}
         self.clean_user_from_groups(user)
         list_groups = []
         dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
         for dn_user in dn_user_list:
             list_groups = list_groups  + [ x[1]['cn'][0].decode('utf-8') for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(member={name})".format(name=dn_user),["cn"]) if x[0] is not None ]
-        self.semaphore.acquire()
+        self.write_lock.acquire()
         for x in list(set(list_groups)):
             if x.lower().startswith("alu"):
                 self.cache_users["students"][1].append(user)
@@ -141,7 +171,8 @@ class CDC:
                     self.cache_users["adm"][1].append(user)
                     self.cache_users["adm"][1] = list(set(self.cache_users["adm"][1]))
 
-        self.semaphore.release()
+        self.write_lock.release()
+        self.save_cache()
         # Remove query from list becauseof this finish
         del(self.list_of_queries[identifier])
     #def _push_query 
@@ -170,45 +201,53 @@ class CDC:
         '''
             Return all groups
         '''
-        self.semaphore.acquire()
-        self.semaphore.release()
-        return self.cache_users
+        self.acquire_read_lock()
+        result = deepcopy(self.cache_users)
+        self.release_read_lock()
+        return result
     #def getgrall
 
     def getgrgid(self, gid):
        '''
             If exists group with gid return its name
        '''
-       self.semaphore.acquire()
-       self.semaphore.release()
+       result = -1
+       self.acquire_read_lock()
        for x in self.cache_users.keys():
             if self.cache_users[x][0] == gid:
-                return x
-       return -1
+                result = x
+                break
+       self.release_read_lock()
+       return result
     #def getgrgid
 
     def getgrnam(self, name):
         '''
             If exists group with name return its gid
         '''
-        self.semaphore.acquire()
-        self.semaphore.release()
+        result = -1
+        self.acquire_read_lock()
         if name in self.cache_users.keys():
-            return self.cache_users[name][0]
-        return -1
+            result = self.cache_users[name][0]
+        self.release_read_lock()
+        return result
     #def getgrnam
 
     def clear_cache(self):
+        self.write_lock.acquire()
         for x in self.cache_users.keys():
             self.cache_users[x][1] = []
+        self.write_lock.release()
         return True
     #def clear_cache
 
     def save_cache(self):
-        self.semaphore.acquire()
-        with self.cache_file.open("a") as fd:
+        self.acquire_read_lock()
+        self.write_file_lock.acquire()
+        with self.cache_file.open("w") as fd:
             json.dump({"groups":self.cache_users, "timeouts":self.users_timeout},fd)
-        self.semaphore.release()
+        self.write_file_lock.release()
+        self.release_read_lock()
     
 cdc = CDC()
 scheduler = BackgroundScheduler()

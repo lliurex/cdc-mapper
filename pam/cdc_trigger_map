@@ -4,8 +4,14 @@ import os
 import requests
 import json
 from pathlib import Path
+import sys
 config_path = Path("/etc/libnss_lliurex.conf")
-config = json.load(config_path.open('r'))
-url_base = config["server"]
-requests.request( url=url_base+"/push/"+os.environ["PAM_USER"], method="get" )
-requests.request( url=url_base+"/wait_for_queries", method="get" )
+if not config_path.exists():
+     sys.exit(0)
+try:
+    config = json.load(config_path.open('r'))
+    url_base = config["server"]
+    requests.request( url=url_base+"/push/"+os.environ["PAM_USER"], method="get", timeout = 13 )
+    requests.request( url=url_base+"/wait_for_queries", method="get", timeout = 13 )
+except Exception:
+    pass
