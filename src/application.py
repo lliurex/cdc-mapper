@@ -206,7 +206,7 @@ class CDC:
 
     def save_cache(self):
         self.semaphore.acquire()
-        with self.cache_file.open("a") as fd:
+        with self.cache_file.open("w") as fd:
             json.dump({"groups":self.cache_users, "timeouts":self.users_timeout},fd)
         self.semaphore.release()
     
