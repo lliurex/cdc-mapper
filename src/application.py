@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from configparser import ConfigParser
 from threading import Thread, Semaphore
+from copy import deepcopy
 import time
 import grp
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -171,36 +172,42 @@ class CDC:
             Return all groups
         '''
         self.semaphore.acquire()
+        result = deepcopy(self.cache_users)
         self.semaphore.release()
-        return self.cache_users
+        return result
     #def getgrall
 
     def getgrgid(self, gid):
        '''
             If exists group with gid return its name
        '''
+       result = -1
        self.semaphore.acquire()
-       self.semaphore.release()
        for x in self.cache_users.keys():
             if self.cache_users[x][0] == gid:
-                return x
-       return -1
+                result = x
+                break
+       self.semaphore.release()
+       return result
     #def getgrgid
 
     def getgrnam(self, name):
         '''
             If exists group with name return its gid
         '''
+        result = -1
         self.semaphore.acquire()
-        self.semaphore.release()
         if name in self.cache_users.keys():
-            return self.cache_users[name][0]
-        return -1
+            result = self.cache_users[name][0]
+        self.semaphore.release()
+        return result
     #def getgrnam
 
     def clear_cache(self):
+        self.semaphore.acquire()
         for x in self.cache_users.keys():
             self.cache_users[x][1] = []
+        self.semaphore.release()
         return True
     #def clear_cache
 
