@@ -111,17 +111,18 @@ class CDC:
         self.semaphore.release()
 
     def _push_query(self, user, identifier):
+        if self.user_in_cache(user):
+            del(self.list_of_queries[identifier])
+            return
+
+        self.users_timeout[user] = {"time":time.time(), "state":"login"}
+        self.save_cache()
         try:
             self.load_connection()
         except ldap.SERVER_DOWN:
             del(self.list_of_queries[identifier])
             return
 
-        if self.user_in_cache(user):
-            del(self.list_of_queries[identifier])
-            return
-
-        self.users_timeout[user] = {"time":time.time(), "state":"login"}
         self.clean_user_from_groups(user)
         list_groups = []
         dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
@@ -143,6 +144,7 @@ class CDC:
                     self.cache_users["adm"][1] = list(set(self.cache_users["adm"][1]))
 
         self.semaphore.release()
+        self.save_cache()
         # Remove query from list becauseof this finish
         del(self.list_of_queries[identifier])
     #def _push_query 
