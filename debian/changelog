@@ -1,3 +1,9 @@
+cdc-mapper (0.10.1) focal; urgency=medium
+
+  * Add dependency
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 16 Feb 2022 11:33:23 +0100
+
 cdc-mapper (0.10) focal; urgency=medium
 
   * Enhance control with Semaphore
