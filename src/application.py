@@ -123,10 +123,12 @@ class CDC:
     def user_in_cache(self, user):
         # 5 minutes cache
         user_in_list = user in self.users_timeout.keys()
+        if not user_in_list:
+            return user_in_list
         self.acquire_read_lock()
         last_login_in_time = self.users_timeout[user]["time"]  >= ( time.time() - 300 )
         self.release_read_lock()
-        return user_in_list and last_login_in_time
+        return last_login_in_time
 
     def clean_user_from_groups(self, user):
         self.write_lock.acquire()
