@@ -1,3 +1,9 @@
+cdc-mapper (0.11.1) focal; urgency=medium
+
+  * Added libnss-lliurex debug key
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 21 Apr 2022 11:06:21 +0200
+
 cdc-mapper (0.11) focal; urgency=medium
 
   * check if users is in list
