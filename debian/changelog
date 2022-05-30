@@ -1,3 +1,9 @@
+cdc-mapper (0.11.1~lliurex1) lliurex22; urgency=medium
+
+  * Backport to Bionic
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Mon, 30 May 2022 16:59:23 +0200
+
 cdc-mapper (0.11.1) focal; urgency=medium
 
   * Added libnss-lliurex debug key
