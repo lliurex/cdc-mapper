@@ -1,3 +1,4 @@
 src/* /usr/share/cdcmapper
 pam/nss_lliurex /usr/share/pam-configs
 pam/cdc_trigger_map /usr/bin
+bin/*	/usr/bin

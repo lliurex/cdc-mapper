@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /usr/share/cdcmapper
+waitress-serve --listen "0.0.0.0:9797" wsgi:app

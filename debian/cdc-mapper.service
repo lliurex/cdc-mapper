@@ -7,7 +7,7 @@ After=network-online.target
 [Service]
 User=root
 WorkingDirectory=/usr/share/cdcmapper
-ExecStart=waitress-serve --listen "0.0.0.0:9797" wsgi:app
+ExecStart=/usr/bin/cdc-mapper-launcher
 StandardOutput=journal
 Restart=always
 RestartSec=5
