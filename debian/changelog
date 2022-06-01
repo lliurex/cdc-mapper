@@ -1,4 +1,4 @@
-cdc-mapper (0.11.1~lliurex1) lliurex22; urgency=medium
+cdc-mapper (0.11.1~lliurex1) bionic; urgency=medium
 
   * Backport to Bionic
 
