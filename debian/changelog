@@ -1,3 +1,9 @@
+cdc-mapper (0.11.1~lliurex2) bionic; urgency=medium
+
+  * Fix problem with systemd service
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 01 Jun 2022 17:21:58 +0200
+
 cdc-mapper (0.11.1~lliurex1) bionic; urgency=medium
 
   * Backport to Bionic
