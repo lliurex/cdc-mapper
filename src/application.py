@@ -30,6 +30,7 @@ class CDC:
         self.init_group("teachers",10003)
         self.init_group("sudo")
         self.init_group("adm")
+        self.init_group("admins")
         self.load_cache()
         
     #def __init__
@@ -172,6 +173,8 @@ class CDC:
                     self.cache_users["sudo"][1] = list(set(self.cache_users["sudo"][1]))
                     self.cache_users["adm"][1].append(user)
                     self.cache_users["adm"][1] = list(set(self.cache_users["adm"][1]))
+                    self.cache_users["admins"][1].append(user)
+                    self.cache_users["admins"][1] = list(set(self.cache_users["admins"][1]))
 
         self.write_lock.release()
         self.save_cache()
