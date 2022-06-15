@@ -1,3 +1,9 @@
+cdc-mapper (0.13) focal; urgency=medium
+
+  * Run anyway if cache is corrupted
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 15 Jun 2022 15:16:48 +0200
+
 cdc-mapper (0.12) focal; urgency=medium
 
   * Add admSai to admins group
