@@ -30,7 +30,6 @@ class CDC:
         self.init_group("teachers",10003)
         self.init_group("sudo")
         self.init_group("adm")
-        self.init_group("admins")
         self.load_cache()
         
     #def __init__
@@ -67,7 +66,10 @@ class CDC:
         if not self.cache_file.exists():
             return 
         with self.cache_file.open("r") as fd:
-            cache_data = json.load(fd)
+            try:
+                cache_data = json.load(fd)
+            except:
+                return 
         self.write_lock.acquire()
         for x in cache_data["groups"].keys():
             if x in self.cache_users.keys():
@@ -106,6 +108,7 @@ class CDC:
        self.ldap.set_option( ldap.OPT_NETWORK_TIMEOUT, 20 )
        self.ldap.set_option( ldap.OPT_TIMEOUT, 20)
        self.ldap.bind_s( self.ldap_config[ "ldap_default_bind_dn" ], self.ldap_config[ "ldap_default_authtok" ] )
+
 
     def push_query( self, user ):
         '''
@@ -173,8 +176,6 @@ class CDC:
                     self.cache_users["sudo"][1] = list(set(self.cache_users["sudo"][1]))
                     self.cache_users["adm"][1].append(user)
                     self.cache_users["adm"][1] = list(set(self.cache_users["adm"][1]))
-                    self.cache_users["admins"][1].append(user)
-                    self.cache_users["admins"][1] = list(set(self.cache_users["admins"][1]))
 
         self.write_lock.release()
         self.save_cache()
@@ -203,9 +204,6 @@ class CDC:
     #def query_status
 
     def getgrall(self):
-        '''
-            Return all groups
-        '''
         self.acquire_read_lock()
         result = deepcopy(self.cache_users)
         self.release_read_lock()
@@ -275,5 +273,7 @@ def wait_for_queries():
 @app.route('/clear_cache')
 def clear_cache():
     return jsonify(cdc.clear_cache())
+
+
 
 
