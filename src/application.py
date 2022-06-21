@@ -107,6 +107,7 @@ class CDC:
        self.ldap.set_option( ldap.VERSION, ldap.VERSION3 )
        self.ldap.set_option( ldap.OPT_NETWORK_TIMEOUT, 20 )
        self.ldap.set_option( ldap.OPT_TIMEOUT, 20)
+       self.ldap.set_option( ldap.OPT_REFERRALS, 0)
        self.ldap.bind_s( self.ldap_config[ "ldap_default_bind_dn" ], self.ldap_config[ "ldap_default_authtok" ] )
 
 
