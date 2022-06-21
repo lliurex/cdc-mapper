@@ -19,9 +19,15 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: LliureX mapper config for standalone or server installations
  libnss lliurex config for desktops, servers or other standalone lliurex installations
 
+Package: cdc-mapper-config-localhost-server
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, n4d-pamnss(>=60), cdc-mapper-config-localhost
+Description: LliureX mapper config for standalone or server installations
+ libnss lliurex config for desktops, servers or other standalone lliurex installations
+
 Package: cdc-mapper-config-client
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, n4d-pamnss(>=60)
 Conflicts: cdc-mapper-config-localhost
 Provides: cdc-mapper-config-localhost
 Replaces: cdc-mapper-config-localhost
