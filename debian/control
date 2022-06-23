@@ -27,7 +27,7 @@ Description: LliureX mapper config for standalone or server installations
 
 Package: cdc-mapper-config-client
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, n4d-pamnss(>=60)
+Depends: ${shlibs:Depends}, ${misc:Depends}, n4d-pamnss(>=0.60)
 Conflicts: cdc-mapper-config-localhost
 Provides: cdc-mapper-config-localhost
 Replaces: cdc-mapper-config-localhost
