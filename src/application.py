@@ -15,6 +15,7 @@ class CDC:
     def __init__(self):
         # initialize variables
         self.cache_file = Path('/var/cache/cdc_mapper/cache')
+        self.config_path = Path( "/etc/sssd/sssd.conf" )
         self.list_of_queries = {}
         self.users_timeout = {}
         self.cache_users = {}
@@ -24,7 +25,7 @@ class CDC:
         self.write_file_lock = Semaphore()
 
         self.cache_file.parent.mkdir(parents=True, exist_ok=True)
-        self.load_configuration()
+        self.succesful_connection = self.load_configuration()
 
         self.init_group("students",10004)
         self.init_group("teachers",10003)
@@ -92,13 +93,14 @@ class CDC:
         return result
 
     def load_configuration( self ):
-        self.config_path = Path( "/etc/sssd/sssd.conf" )
         self.sssd_config = ConfigParser()
         if self.config_path.exists():
             self.sssd_config.read( str( self.config_path ) )
             list_gva_domains = list(filter(lambda x : "EDU.GVA.ES" in x, self.sssd_config.sections()))
             self.ldap_config = self.sssd_config[list_gva_domains[0]]
             self.base_dn = self.ldap_config["ldap_search_base"]
+            return True
+        return False
 
     #def load_configuration
 
@@ -146,6 +148,14 @@ class CDC:
         if self.user_in_cache(user):
             del(self.list_of_queries[identifier])
             return
+        
+        if not self.succesful_connection:
+            if self.config_path.exists():
+                self.succesful_connection = self.load_configuration()
+            else:
+                del(self.list_of_queries[identifier])
+                return
+
 
         self.write_lock.acquire()
         self.users_timeout[user] = {"time":time.time(), "state":"login"}
