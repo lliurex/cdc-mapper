@@ -1,3 +1,9 @@
+cdc-mapper (0.15.2) focal; urgency=medium
+
+  * Check if cdc is enabled
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 01 Jul 2022 10:13:11 +0200
+
 cdc-mapper (0.15.1) focal; urgency=medium
 
   * 
