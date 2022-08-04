@@ -1,3 +1,9 @@
+cdc-mapper (0.15.3~lliurex1) bionic; urgency=medium
+
+  * Sync with focal version
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 04 Aug 2022 16:38:05 +0200
+
 cdc-mapper (0.14~lliurex1) bionic; urgency=medium
 
   * Add referral option
