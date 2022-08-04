@@ -8,7 +8,7 @@ Homepage: https://www.lliurex.net
 
 Package: cdc-mapper
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, python3-flask, python3-waitress, python3-ldap, python3-apscheduler
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-flask, python3-waitress, python3-ldap, python3-apscheduler, python3
 Description: LliureX mapper for CDC users
  Create service to map on login user step CDC users to lliurex groups
  (teachers, students, ...)
@@ -17,7 +17,8 @@ Package: cdc-mapper-config-localhost
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: LliureX mapper config for standalone or server installations
- libnss lliurex config for desktops, servers or other standalone lliurex installations
+ libnss lliurex config for desktops, servers or other standalone lliurex 
+ installations
 
 Package: cdc-mapper-config-client
 Architecture: all
