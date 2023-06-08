@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ -e /var/lib/sss/db/cache_EDU.GVA.ES.ldb ]; then
+	DN_NAME=$(ldbsearch -H /var/lib/sss/db/cache_EDU.GVA.ES.ldb "(fullname=$1)" name 2>/dev/null | grep "^name" | awk '{print $2}')
+	ldbsearch -H /var/lib/sss/db/cache_EDU.GVA.ES.ldb '(memberuid='$DN_NAME')' name 2>/dev/null | grep "^name" | awk '{print $2}'
+fi
