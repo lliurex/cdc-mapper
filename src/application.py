@@ -7,6 +7,7 @@ from threading import Thread, Semaphore
 from copy import deepcopy
 import time
 import grp
+import subprocess as s
 from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 
@@ -160,19 +161,21 @@ class CDC:
         self.write_lock.acquire()
         self.users_timeout[user] = {"time":time.time(), "state":"login"}
         self.write_lock.release()
-
         self.save_cache()
+        list_groups = []
         try:
             self.load_connection()
         except ldap.SERVER_DOWN:
-            del(self.list_of_queries[identifier])
-            return
-
-        self.clean_user_from_groups(user)
-        list_groups = []
-        dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
-        for dn_user in dn_user_list:
-            list_groups = list_groups  + [ x[1]['cn'][0].decode('utf-8') for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(member={name})".format(name=dn_user),["cn"]) if x[0] is not None ]
+            p=s.Popen(["/usr/sbin/get_groups_cdc_users_from_cache", user], stdout=s.PIPE)
+            list_groups = p.communicate()[0].decode('utf-8').split("\n")[0:-1]
+            if len(list_groups) == 0:
+                del(self.list_of_queries[identifier])
+                return
+        if len(list_groups) == 0:
+            self.clean_user_from_groups(user)
+            dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
+            for dn_user in dn_user_list:
+                list_groups = list_groups  + [ x[1]['cn'][0].decode('utf-8') for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(member={name})".format(name=dn_user),["cn"]) if x[0] is not None ]
         self.write_lock.acquire()
         for x in list(set(list_groups)):
             if x.lower().startswith("alu"):
