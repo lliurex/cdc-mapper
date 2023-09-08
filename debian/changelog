@@ -1,3 +1,9 @@
+cdc-mapper (0.26) jammy; urgency=medium
+
+  * Initial release for Jammy
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Fri, 08 Sep 2023 12:01:15 +0200
+
 cdc-mapper (0.16) focal; urgency=medium
 
   * Add support to map groups when cdc server is offline via sssd cache
