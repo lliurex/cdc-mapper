@@ -1,0 +1,20 @@
+[Unit]
+Description=CDC mapper
+Wants=network-online.target
+After=network-online.target
+
+
+[Service]
+User=root
+WorkingDirectory=/usr/share/cdcmapper
+ExecStart=waitress-serve --listen "0.0.0.0:9797" wsgi:app
+StandardOutput=journal
+Restart=always
+RestartSec=5
+StartLimitBurst=10
+StartLimitInterval=200
+
+
+[Install]
+WantedBy=multi-user.target
+

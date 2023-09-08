@@ -1,0 +1,152 @@
+cdc-mapper (0.16) focal; urgency=medium
+
+  * Add support to map groups when cdc server is offline via sssd cache
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 08 Jun 2023 13:49:03 +0200
+
+cdc-mapper (0.15.6) focal; urgency=medium
+
+  * Add dependency with libnss-lliurex
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 20 Oct 2022 14:43:50 +0200
+
+cdc-mapper (0.15.3) focal; urgency=medium
+
+  * Fix dependency 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 05 Jul 2022 15:00:44 +0200
+
+cdc-mapper (0.15.2) focal; urgency=medium
+
+  * Check if cdc is enabled
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 01 Jul 2022 10:13:11 +0200
+
+cdc-mapper (0.15.1) focal; urgency=medium
+
+  * 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 23 Jun 2022 09:43:25 +0200
+
+cdc-mapper (0.15) focal; urgency=medium
+
+  * Add dependency with n4d-pamnss for classroom 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 21 Jun 2022 21:50:46 +0200
+
+cdc-mapper (0.14) focal; urgency=medium
+
+  * Add referral option
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 21 Jun 2022 13:43:18 +0200
+
+cdc-mapper (0.13) focal; urgency=medium
+
+  * Run anyway if cache is corrupted
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 15 Jun 2022 15:16:48 +0200
+
+cdc-mapper (0.12) focal; urgency=medium
+
+  * Add admSai to admins group
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 03 Jun 2022 15:22:35 +0200
+
+cdc-mapper (0.11.1) focal; urgency=medium
+
+  * Added libnss-lliurex debug key
+
+ -- Enrique Medina Gremaldos <quiqueiii@gmail.com>  Thu, 21 Apr 2022 11:06:21 +0200
+
+cdc-mapper (0.11) focal; urgency=medium
+
+  * check if users is in list
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 17 Feb 2022 11:03:22 +0100
+
+cdc-mapper (0.10.1) focal; urgency=medium
+
+  * Add dependency
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 16 Feb 2022 11:33:23 +0100
+
+cdc-mapper (0.10) focal; urgency=medium
+
+  * Enhance control with Semaphore
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 16 Feb 2022 10:48:33 +0100
+
+cdc-mapper (0.9) focal; urgency=medium
+
+  * Add cache
+  * Add timeout to avoid 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 08 Feb 2022 16:01:09 +0100
+
+cdc-mapper (0.8) focal; urgency=medium
+
+  * Replace gunicor by waitress. This is multithreading
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 27 Jan 2022 16:02:04 +0100
+
+cdc-mapper (0.7) focal; urgency=medium
+
+  * Add gunicorn as server
+  * Add dependencies
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 27 Jan 2022 10:03:52 +0100
+
+cdc-mapper (0.6) focal; urgency=medium
+
+  * Add mutex
+  * Add 5 minutes cache 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 14:04:09 +0100
+
+cdc-mapper (0.5.3) focal; urgency=medium
+
+  * Open file to parse
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 12:17:51 +0100
+
+cdc-mapper (0.5.2) focal; urgency=medium
+
+  * Wrong path
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 12:00:57 +0100
+
+cdc-mapper (0.5.1) focal; urgency=medium
+
+  * Fix code 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Jan 2022 11:10:37 +0100
+
+cdc-mapper (0.5) focal; urgency=medium
+
+  * Add configs for client and standalone 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Mon, 24 Jan 2022 15:22:40 +0100
+
+cdc-mapper (0.4) focal; urgency=medium
+
+  * Add support to development configuration
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 21 Jan 2022 16:03:08 +0100
+
+cdc-mapper (0.3) focal; urgency=medium
+
+  * Enable pam module 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 21 Jan 2022 12:19:45 +0100
+
+cdc-mapper (0.2) focal; urgency=medium
+
+  * Add files
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 21 Jan 2022 11:02:34 +0100
+
+cdc-mapper (0.1) focal; urgency=medium
+
+  * Initial Release.
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 20 Jan 2022 19:43:17 +0100
