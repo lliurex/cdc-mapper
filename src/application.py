@@ -278,7 +278,7 @@ def getgrall():
 
 @app.route('/push/<username>')
 def push_user(username):
-    user_split = username.split("0")[0]
+    user_split = username.split("@")[0]
     return jsonify(cdc.push_query(user_split))
 
 @app.route('/wait_for_queries')
