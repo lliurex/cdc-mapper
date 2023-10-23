@@ -1,3 +1,9 @@
+cdc-mapper (0.27) jammy; urgency=medium
+
+  * Fix bug with user log in with domain
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Mon, 23 Oct 2023 12:00:10 +0200
+
 cdc-mapper (0.26) jammy; urgency=medium
 
   * Initial release for Jammy
