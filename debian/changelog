@@ -1,3 +1,9 @@
+cdc-mapper (0.28) jammy; urgency=medium
+
+  * Add lpadmin to adm users
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Wed, 27 Mar 2024 12:29:10 +0100
+
 cdc-mapper (0.27.2) jammy; urgency=medium
 
   * Fixed control to restore pkgs for server and client
