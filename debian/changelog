@@ -1,3 +1,9 @@
+cdc-mapper (0.19) focal; urgency=medium
+
+  * Add epoptes 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Fri, 31 May 2024 12:26:39 +0200
+
 cdc-mapper (0.18) focal; urgency=medium
 
   * Add lpadmin
