@@ -33,6 +33,7 @@ class CDC:
         self.init_group("sudo")
         self.init_group("adm")
         self.init_group("lpadmin")
+        self.init_group("epoptes")
         self.load_cache()
         
     #def __init__
@@ -185,6 +186,9 @@ class CDC:
             if x.lower().startswith("doc"):
                 self.cache_users["teachers"][1].append(user)
                 self.cache_users["teachers"][1] = list(set(self.cache_users["teachers"][1]))
+                self.cache_users["epoptes"][1].append(user)
+                self.cache_users["epoptes"][1] = list(set(self.cache_users["epoptes"][1]))
+
             if "sudo" in self.cache_users.keys():
                 if x.lower().startswith("adm"):
                     self.cache_users["sudo"][1].append(user)
