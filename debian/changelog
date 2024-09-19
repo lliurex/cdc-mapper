@@ -1,3 +1,9 @@
+cdc-mapper (0.39) noble; urgency=medium
+
+  * Initial release for noble
+
+ -- Juan Ramon Pelegrina <juapesai@hotmail.com>  Thu, 19 Sep 2024 09:19:58 +0200
+
 cdc-mapper (0.29) jammy; urgency=medium
 
   * Add epoptes
