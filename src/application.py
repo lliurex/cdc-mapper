@@ -15,8 +15,9 @@ class CDC:
 
     def __init__(self):
         # initialize variables
-        self.cache_file = Path('/var/cache/cdc_mapper/cache')
+        self.cache_file = Path( "/var/cache/cdc_mapper/cache" )
         self.config_path = Path( "/etc/sssd/sssd.conf" )
+        self.groups_folders = [ Path( "/usr/share/cdc-mapper" ), Path( "/etc/cdc-mapper" )]
         self.list_of_queries = {}
         self.users_timeout = {}
         self.cache_users = {}
@@ -24,6 +25,9 @@ class CDC:
         self.read_lock_counter = 0
         self.write_lock = Semaphore()
         self.write_file_lock = Semaphore()
+        self.alu_groups = []
+        self.doc_groups = []
+        self.adm_groups = []
 
         self.cache_file.parent.mkdir(parents=True, exist_ok=True)
         self.succesful_connection = self.load_configuration()
@@ -37,6 +41,30 @@ class CDC:
         self.load_cache()
         
     #def __init__
+
+    def load_groups(self):
+        info = None
+        for folder_path in self.groups_folders:
+            for file_path in folder_path.iterdir():
+                with file_path.open('r') as fd:
+                    info = json.load(fd)
+        if info is not None:
+            self.process_group(info)
+                
+
+    def process_group( self, info ):
+        args = {"name":info["name"]}
+        if "gid" in info:
+            args["default_id"] = info["gid"]
+        self.init_group(**args)
+        if info["alu"]:
+            self.alu_groups.append(info["name"])
+        if info["doc"]:
+            self.doc_groups.append(info["name"])
+        if info["adm"]:
+            self.adm_groups.append(info["name"])
+
+
 
     def acquire_read_lock(self):
         self.read_lock.acquire()
@@ -175,28 +203,23 @@ class CDC:
                 return
         if len(list_groups) == 0:
             self.clean_user_from_groups(user)
-            dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(cn={name})".format(name=user),["dn"]) if x[0] is not None ]
+            dn_user_list = [ x[0] for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(sAMAccountName={name})".format(name=user),["dn"]) if x[0] is not None ]
             for dn_user in dn_user_list:
                 list_groups = list_groups  + [ x[1]['cn'][0].decode('utf-8') for x in self.ldap.search_s(self.base_dn, ldap.SCOPE_SUBTREE, "(member={name})".format(name=dn_user),["cn"]) if x[0] is not None ]
         self.write_lock.acquire()
         for x in list(set(list_groups)):
             if x.lower().startswith("alu"):
-                self.cache_users["students"][1].append(user)
-                self.cache_users["students"][1] = list(set(self.cache_users["students"][1]))
+                for group in self.alu_groups:
+                    self.cache_users[group][1].append(user)
+                    self.cache_users[group][1] = list(set(self.cache_users[group][1]))
             if x.lower().startswith("doc"):
-                self.cache_users["teachers"][1].append(user)
-                self.cache_users["teachers"][1] = list(set(self.cache_users["teachers"][1]))
-                self.cache_users["epoptes"][1].append(user)
-                self.cache_users["epoptes"][1] = list(set(self.cache_users["epoptes"][1]))
-
-            if "sudo" in self.cache_users.keys():
-                if x.lower().startswith("adm"):
-                    self.cache_users["sudo"][1].append(user)
-                    self.cache_users["sudo"][1] = list(set(self.cache_users["sudo"][1]))
-                    self.cache_users["adm"][1].append(user)
-                    self.cache_users["adm"][1] = list(set(self.cache_users["adm"][1]))
-                    self.cache_users["lpadmin"][1].append(user)
-                    self.cache_users["lpadmin"][1] = list(set(self.cache_users["lpadmin"][1]))
+                for group in self.doc_groups:
+                    self.cache_users[group][1].append(user)
+                    self.cache_users[group][1] = list(set(self.cache_users[group][1]))
+            if x.lower().startswith("adm"):
+                for group in self.adm_groups:
+                    self.cache_users[group][1].append(user)
+                    self.cache_users[group][1] = list(set(self.cache_users[group][1]))
 
         self.write_lock.release()
         self.save_cache()
