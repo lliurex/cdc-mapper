@@ -1,8 +1,8 @@
 {
 	"name":"docker",
 	"gid":10000,
-	"editable":False,
-	"alu":True,
-	"doc":True,
-	"adm":False
+	"editable":false,
+	"alu":true,
+	"doc":true,
+	"adm":false
 }
