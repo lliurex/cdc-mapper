@@ -1,3 +1,9 @@
+cdc-mapper (0.30) jammy; urgency=medium
+
+  * Add custom groups 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 20 Feb 2025 09:48:52 +0100
+
 cdc-mapper (0.29) jammy; urgency=medium
 
   * Add epoptes
