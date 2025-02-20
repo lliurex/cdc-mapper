@@ -17,7 +17,7 @@ class CDC:
         # initialize variables
         self.cache_file = Path( "/var/cache/cdc_mapper/cache" )
         self.config_path = Path( "/etc/sssd/sssd.conf" )
-        self.groups_folders = [ Path( "/usr/share/cdc-mapper" ), Path( "/etc/cdc-mapper" )]
+        self.groups_folders = [ Path( "/usr/share/cdc-mapper/groups" ), Path( "/etc/cdc-mapper" )]
         self.list_of_queries = {}
         self.users_timeout = {}
         self.cache_users = {}
