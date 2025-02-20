@@ -1,4 +1,5 @@
-src/* /usr/share/cdcmapper
+src/* /usr/share/cdc-mapper
 pam/nss_lliurex /usr/share/pam-configs
 pam/cdc_trigger_map /usr/bin
 pam/get_groups_cdc_users_from_cache /usr/sbin
+groups_configs	/usr/share/cdc-mapper/groups
