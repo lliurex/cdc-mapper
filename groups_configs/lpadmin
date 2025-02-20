@@ -1,0 +1,7 @@
+{
+  "name":"lpadmin",
+  "editable":false,
+  "alu":false,
+  "doc":false,
+  "adm":true
+}

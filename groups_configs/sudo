@@ -1,0 +1,7 @@
+{
+  "name":"sudo",
+  "editable":false,
+  "alu":false,
+  "doc":false,
+  "adm":true
+}

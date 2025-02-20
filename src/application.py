@@ -32,12 +32,7 @@ class CDC:
         self.cache_file.parent.mkdir(parents=True, exist_ok=True)
         self.succesful_connection = self.load_configuration()
 
-        self.init_group("students",10004)
-        self.init_group("teachers",10003)
-        self.init_group("sudo")
-        self.init_group("adm")
-        self.init_group("lpadmin")
-        self.init_group("epoptes")
+        self.load_groups()
         self.load_cache()
         
     #def __init__
@@ -46,13 +41,18 @@ class CDC:
         info = None
         for folder_path in self.groups_folders:
             for file_path in folder_path.iterdir():
-                with file_path.open('r') as fd:
-                    info = json.load(fd)
-        if info is not None:
-            self.process_group(info)
+                try:
+                    with file_path.open('r') as fd:
+                        info = json.load(fd)
+                except:
+                    info = None
+                if info is not None:
+                    self.process_group(info)
                 
 
     def process_group( self, info ):
+        if not self.check_json(info):
+            return
         args = {"name":info["name"]}
         if "gid" in info:
             args["default_id"] = info["gid"]
@@ -64,7 +64,10 @@ class CDC:
         if info["adm"]:
             self.adm_groups.append(info["name"])
 
-
+    def check_json(self, info):
+        if "name" not in info.keys():
+            return False
+        return True
 
     def acquire_read_lock(self):
         self.read_lock.acquire()

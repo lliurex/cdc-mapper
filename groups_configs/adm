@@ -1,0 +1,7 @@
+{
+  "name":"adm",
+  "editable":false,
+  "alu":false,
+  "doc":false,
+  "adm":true
+}
