@@ -1,3 +1,9 @@
+cdc-mapper (0.31) jammy; urgency=medium
+
+  *  Fix permissions
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Tue, 25 Feb 2025 13:07:05 +0100
+
 cdc-mapper (0.30) jammy; urgency=medium
 
   * Add custom groups 
