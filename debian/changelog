@@ -1,4 +1,4 @@
-cdc-mapper (0.32) noble; urgency=medium
+cdc-mapper (0.32) jammy; urgency=medium
 
   * install correct files
 
