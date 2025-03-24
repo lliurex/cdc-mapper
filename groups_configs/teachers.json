@@ -4,5 +4,6 @@
   "editable":false,
   "alu":false,
   "doc":true,
-  "adm":false
+  "adm":false,
+  "default_gid":300
 }
