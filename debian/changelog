@@ -1,3 +1,10 @@
+cdc-mapper (0.33) jammy; urgency=medium
+
+  * Add default_gid field
+  * Add admins group
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Mon, 24 Mar 2025 15:30:22 +0100
+
 cdc-mapper (0.32) jammy; urgency=medium
 
   * install correct files
