@@ -56,7 +56,8 @@ class CDC:
         args = {"name":info["name"]}
         if "gid" in info:
             args["default_id"] = info["gid"]
-        self.init_group(**args)
+        if not self.init_group(**args):
+            return
         if info["alu"]:
             self.alu_groups.append(info["name"])
         if info["doc"]:
@@ -91,10 +92,11 @@ class CDC:
             if default_id is not None:
                 candidate_gid = default_id
             else:
-                return 
+                return False 
         self.write_lock.acquire()
         self.cache_users[name] = [candidate_gid,[]]
         self.write_lock.release()
+        return True
     #def init_group
 
     def load_cache(self):
