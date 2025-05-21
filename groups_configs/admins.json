@@ -1,0 +1,9 @@
+{
+  "name":"admins",
+  "gid":10005,
+  "editable":false,
+  "alu":false,
+  "doc":false,
+  "adm":true,
+  "default_gid":500
+}

@@ -1,0 +1,9 @@
+{
+  "name":"teachers",
+  "gid":10003,
+  "editable":false,
+  "alu":false,
+  "doc":true,
+  "adm":false,
+  "default_gid":300
+}
