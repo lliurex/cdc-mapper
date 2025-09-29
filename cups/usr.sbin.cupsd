@@ -1,0 +1,2 @@
+/var/lib/sss/pipes/private/pam rw,
+unix (bind) type=dgram addr=@userdb-*,
