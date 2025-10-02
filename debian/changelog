@@ -1,3 +1,9 @@
+cdc-mapper (0.37) jammy; urgency=medium
+
+  * remove file by postrm
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 02 Oct 2025 12:09:36 +0200
+
 cdc-mapper (0.36) jammy; urgency=medium
 
   * install cups by postinst 
