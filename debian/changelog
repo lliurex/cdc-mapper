@@ -1,20 +1,8 @@
-cdc-mapper (0.38.1) jammy; urgency=medium
-
-  * 
-
- -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 02 Oct 2025 12:28:32 +0200
-
-cdc-mapper (0.38) jammy; urgency=medium
-
-  * test
-
- -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 02 Oct 2025 12:23:56 +0200
-
-cdc-mapper (0.37) jammy; urgency=medium
+cdc-mapper (0.39) jammy; urgency=medium
 
   * remove file by postrm
 
- -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 02 Oct 2025 12:09:36 +0200
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 02 Oct 2025 12:33:26 +0200
 
 cdc-mapper (0.36) jammy; urgency=medium
 
