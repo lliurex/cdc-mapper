@@ -50,6 +50,8 @@ case "$1" in
             remove_nss_entry
         fi
 	pam-auth-update --force --package n4d-cdc
+	touch /tmp/$1
+	rm /etc/apparmor.d/local/usr.sbin.cupsd || true
     ;;
     upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
     ;;
