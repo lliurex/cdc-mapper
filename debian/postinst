@@ -49,6 +49,7 @@ case "$1" in
 		insert_nss_entry
 	fi
 	pam-auth-update --force --package n4d-cdc	
+	cp /usr/share/cdc-mapper/fix/* /etc/apparmor.d/local
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
