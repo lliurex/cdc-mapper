@@ -2,6 +2,6 @@
   "name":"lpadmin",
   "editable":false,
   "alu":false,
-  "doc":false,
+  "doc":true,
   "adm":true
 }
