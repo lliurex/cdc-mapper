@@ -1,3 +1,9 @@
+cdc-mapper (0.40) jammy; urgency=medium
+
+  * Add teachers to lpadmin group 
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 23 Oct 2025 08:21:15 +0200
+
 cdc-mapper (0.39) jammy; urgency=medium
 
   * remove file by postrm
