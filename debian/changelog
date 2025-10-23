@@ -1,3 +1,9 @@
+cdc-mapper (0.41) noble; urgency=medium
+
+  * Add teachers to lpadmin group
+
+ -- Raul Rodrigo Segura <raurodse@gmail.com>  Thu, 23 Oct 2025 08:22:48 +0200
+
 cdc-mapper (0.40) noble; urgency=medium
 
   * New version of cdc-mapper 
