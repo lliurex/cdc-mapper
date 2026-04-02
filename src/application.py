@@ -28,6 +28,7 @@ class CDC:
         self.alu_groups = []
         self.doc_groups = []
         self.adm_groups = []
+        self.nod_groups = []
 
         self.cache_file.parent.mkdir(parents=True, exist_ok=True)
         self.succesful_connection = self.load_configuration()
@@ -64,6 +65,8 @@ class CDC:
             self.doc_groups.append(info["name"])
         if info["adm"]:
             self.adm_groups.append(info["name"])
+        if "nod" in info and info["nod"]:
+            self.nod_groups.append(info["name"])
 
     def check_json(self, info):
         if "name" not in info.keys():
@@ -223,6 +226,10 @@ class CDC:
                     self.cache_users[group][1] = list(set(self.cache_users[group][1]))
             if x.lower().startswith("adm"):
                 for group in self.adm_groups:
+                    self.cache_users[group][1].append(user)
+                    self.cache_users[group][1] = list(set(self.cache_users[group][1]))
+            if x.lower().startswith("nodocente") and x.lower() != "nodocente":
+                for group in self.nod_groups:
                     self.cache_users[group][1].append(user)
                     self.cache_users[group][1] = list(set(self.cache_users[group][1]))
 
