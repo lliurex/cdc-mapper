@@ -1,0 +1,8 @@
+{
+  "name":"NoDocente",
+  "editable":false,
+  "alu":false,
+  "doc":false,
+  "adm":false,
+  "nod":true
+}
