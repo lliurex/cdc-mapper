@@ -1,1 +1,2 @@
 groups_configs/* /usr/share/cdc-mapper/groups/
+types/*		 /usr/share/cdc-mapper/types/
