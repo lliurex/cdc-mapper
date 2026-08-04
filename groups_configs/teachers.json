@@ -2,8 +2,8 @@
   "name":"teachers",
   "gid":10003,
   "editable":false,
-  "alu":false,
-  "doc":true,
-  "adm":false,
+  "types":{
+    "doc":true
+  },
   "default_gid":300
 }
