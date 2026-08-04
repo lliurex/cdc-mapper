@@ -2,8 +2,8 @@
   "name":"admins",
   "gid":10001,
   "editable":false,
-  "alu":false,
-  "doc":false,
-  "adm":true,
+  "types":{
+    "adm":true
+  },
   "default_gid":500
 }

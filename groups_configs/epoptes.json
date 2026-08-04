@@ -1,7 +1,8 @@
 {
   "name":"epoptes",
   "editable":false,
-  "alu":false,
-  "doc":true,
-  "adm":true
+  "types":{
+    "doc":true,
+    "adm":true
+  }
 }
